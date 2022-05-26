@@ -19,6 +19,6 @@ public class SightService {
     }
 
     public void save(Sight sight) {
-        repository.save(sight)
+        repository.save(sight);
     }
 }
