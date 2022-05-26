@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: sight
+      author: langsot
+      changes:
+        - createTable:
+            tableName: sight
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(40)
+              - column:
+                  name: date
+                  type: date
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: sightType
+                  type: varchar(20)
+              - column:
+                  name: cityId
+                  type: int
+                  constraints:
+                    referencedTableName: city
+                    referencedColumnNames: id
+                    foreignKeyName: city_id
