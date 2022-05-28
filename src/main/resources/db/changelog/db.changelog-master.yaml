@@ -1,7 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/1.0/create-city-table.yaml
+      file: db/changelog/1.0/create-city-table.sql
   - include:
-      file: db/changelog/1.0/create-sight-table.yaml
-  - include:
-      file: db/changelog/data/initial-data.yaml
+      file: db/changelog/data/initial-data.sql

@@ -1,31 +1,42 @@
 package com.github.langsot.citysights.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@SuperBuilder
+@RequiredArgsConstructor
+@ToString
 @Entity
-@Table
+@Table(name = "sights")
 public class Sight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String name;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private String description;
 
-    private SightType sightType;
+    @Enumerated(EnumType.STRING)
+    private SightType sight_type;
 
-    @ManyToOne(targetEntity = City.class)
-    private Long cityId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
+    @ToString.Exclude
+    private City city_id;
+
+    @JsonProperty("city_id")
+    private void keks(Integer id) {
+        this.city_id = new City();
+        city_id.setId(id);
+    }
 }

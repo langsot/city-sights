@@ -1,23 +1,22 @@
 package com.github.langsot.citysights.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
-
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
+@RequiredArgsConstructor
 @ToString
 @Entity
-@Table
+@Table(name = "cities")
 public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String name;
 
@@ -26,5 +25,4 @@ public class City {
     private Boolean metro;
 
     private String country;
-
 }

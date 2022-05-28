@@ -2,5 +2,9 @@ version: "3.9"
 services:
   postgres:
     image: postgres:13.4
+    environment:
+      POSTGRES_DB: "bubblegum"
+      POSTGRES_USER: "superadmin"
+      POSTGRES_PASSWORD: "superpass"
     ports:
       - "5432:5432"
