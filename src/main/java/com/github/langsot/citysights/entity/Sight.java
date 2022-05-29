@@ -1,6 +1,5 @@
 package com.github.langsot.citysights.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -29,14 +28,8 @@ public class Sight {
     @Enumerated(EnumType.STRING)
     private SightType sight_type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id")
     @ToString.Exclude
     private City city_id;
-
-    @JsonProperty("city_id")
-    private void keks(Integer id) {
-        this.city_id = new City();
-        city_id.setId(id);
-    }
 }

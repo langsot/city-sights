@@ -3,7 +3,9 @@ package com.github.langsot.citysights.controller;
 import com.github.langsot.citysights.entity.Sight;
 import com.github.langsot.citysights.entity.SightType;
 import com.github.langsot.citysights.exception.SightNotFoundException;
+import com.github.langsot.citysights.repo.CityRepository;
 import com.github.langsot.citysights.repo.SightRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -21,6 +23,7 @@ import java.util.List;
 public class SightController {
 
     private SightRepository repository;
+    private CityRepository repository1;
 
     /**
      * Получение списка достопримечательносей
@@ -28,22 +31,24 @@ public class SightController {
      * @param filter : Параметр фильтрации по типу достопримечательности
      * @return Результирующий список. Если параметры пустые - выводит всё
      */
+    @Operation(summary = "Получение всех Sights, либо с учетом параметров. sort принимает два параметра 'a' and 'z'")
     @GetMapping()
     public ResponseEntity<List<Sight>> getAllSight(@RequestParam(required = false) Character sort,
                                    @RequestParam(required = false) SightType filter) {
         log.info("Получаем какой то список достопримечательностей");
-        if (sort == 'a') {
+
+        if (sort != null && sort.equals('a')) {
             return new ResponseEntity<>(filter == null
                     ? repository.findAll(Sort.by("name"))
-                    : repository.findAllBySight_type(filter, Sort.by(Sort.Direction.ASC, "name")),HttpStatus.OK);
+                    : repository.findAllBySight_typeOrderByName(filter),HttpStatus.OK);
         }
-        if (sort == 'z') {
+        if (sort != null && sort.equals('z')) {
             return new ResponseEntity<>(filter == null
                     ? repository.findAll(Sort.by(Sort.Direction.DESC, "name"))
-                    : repository.findAllBySight_type(filter, Sort.by(Sort.Direction.DESC, "name")), HttpStatus.OK);
+                    : repository.findAllBySight_typeOrderByNameDesc(filter), HttpStatus.OK);
         }
-        if (filter != null) {
-            return new ResponseEntity<>(repository.findAllBySight_type(filter, Sort.unsorted()), HttpStatus.OK);
+        if (filter != null && sort == null) {
+            return new ResponseEntity<>(repository.findBySight_type(filter), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
@@ -54,9 +59,10 @@ public class SightController {
      * @param id Уникальный идентификатор города
      * @return Получение всех досопримечательностей города
      */
+    @Operation(summary = "Получение всех достопримечательностей города по, соответсвенно, его id")
     @GetMapping("{id}")
     public ResponseEntity<List<Sight>> getAllSightsInCity(@PathVariable("id") Integer id) {
-        List<Sight> sights = new ArrayList<>(repository.findAllByCity_id(id));
+        List<Sight> sights = new ArrayList<>(repository1.getAllSights(id));
         return new ResponseEntity<>(sights, HttpStatus.OK);
     }
 
@@ -66,6 +72,7 @@ public class SightController {
      * @param newSight Сущность, параметры которой(description) будут скопированны в существующую запись
      * @return Статус и обновленная сущность
      */
+    @Operation(summary = "Обновление описания. Only description")
     @PutMapping("/update/{id}")
     public ResponseEntity<Sight> updateCity(@PathVariable("id") Integer id,
                                             @RequestBody Sight newSight) {
@@ -87,6 +94,7 @@ public class SightController {
      * @param sight Создаваемый объект класса Sight
      * @return результат работы метода save в теле ResponseEntity
      */
+    @Operation(summary = "Добавление новой достопримечательности. В city_id указать только id")
     @PostMapping
     public ResponseEntity<Sight> addSight(@RequestBody Sight sight) {
         log.info("Добавление достопримечательности {}", sight);
@@ -103,6 +111,7 @@ public class SightController {
      * @param id : Уникальный идентификатор достопримечательности
      * @return Статус запроса
      */
+    @Operation(summary = "Удаление достопримечательности по её id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Sight> deleteSight(@PathVariable("id") Integer id) {
         log.info("Запрос на удаление достопримечательности");

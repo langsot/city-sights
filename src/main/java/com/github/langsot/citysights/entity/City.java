@@ -1,9 +1,11 @@
 package com.github.langsot.citysights.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,4 +27,8 @@ public class City {
     private Boolean metro;
 
     private String country;
+
+    @OneToMany(mappedBy = "city_id")
+    @JsonIgnore
+    private List<Sight> sights;
 }

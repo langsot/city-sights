@@ -3,6 +3,7 @@ package com.github.langsot.citysights.controller;
 import com.github.langsot.citysights.entity.City;
 import com.github.langsot.citysights.exception.CityNotFoundException;
 import com.github.langsot.citysights.repo.CityRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class CityController {
     private CityRepository repository;
 
 
+    @Operation(summary = "Получение всех городов")
     @GetMapping()
     public List<City> getAllCity() {
         return repository.findAll();
@@ -33,6 +35,7 @@ public class CityController {
      *               будут скопированны в существующую запись
      * @return Обновленная сущность
      */
+    @Operation(summary = "Обновление города по id (можно менять только 'population' and 'metro')")
     @PutMapping("/update/{id}")
     public ResponseEntity<City> updateCity(@PathVariable("id") Integer id,
                            @RequestBody City newCity) {
@@ -57,6 +60,7 @@ public class CityController {
      * @param city Создаваемый объект класса City
      * @return результат работы метода save в теле ResponseEntity
      */
+    @Operation(summary = "Добавление нового города")
     @PostMapping
     public ResponseEntity<City> addCity(@RequestBody City city) {
         log.info("Добавление города {}", city);
