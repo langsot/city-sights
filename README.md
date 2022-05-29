@@ -14,6 +14,6 @@ Postgres : необходимо создать Базу данных из proper
 
 Для просмотра api проектика перейти по ссылке:
 
-###http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/swagger-ui/index.html
 
 
